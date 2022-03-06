@@ -11,8 +11,20 @@ public class Cart {
     private List<Item> items = new ArrayList<>();
 
     public boolean addItem(Item item) {
+        for(Item i : items) {
+            if(i.getProduct().getId().equals(item.getProduct().getId())) {
+                i.setAmount(i.getAmount()+item.getAmount());
+                return true;
+            }
+        }
+
         return items.add(item);
     }
+
+    public boolean emptyList() {
+        items.clear();
+        return true;
+    };
 
     @Override
     public String toString() {
