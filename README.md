@@ -1,37 +1,17 @@
-# POS in Shell
+Layered Systems
 
-The demo shows a simple POS system with command line interface. Currently it implements three commands which you can see using the `help` command.
+即为分层系统，将不同软件间相同的组成结构抽象成一层，
 
-```shell
-  .   ____          _            __ _ _
- /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
- \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  '  |____| .__|_| |_|_| |_\__, | / / / /
- =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::                (v2.5.7)
- 
-shell:>help
-AVAILABLE COMMANDS
+不同软件的相同层具有相似的实现方式，为了减少软件内部的耦合性，提高代码可重复利用性，故将软件分层处理。
 
-Built-In Commands
-        clear: Clear the shell screen.
-        exit, quit: Exit the shell.
-        help: Display help about available commands.
-        history: Display or save the history of previously run commands
-        script: Read and execute commands from a file.
-        stacktrace: Display the full stacktrace of the last error.
+此Pos系统利用了三层结构，分别为用户交互层，业务逻辑层，数据库连接层。
 
-Pos Command
-        a: Add a Product to Cart
-        n: New Cart
-        p: List Products
-```
+业务逻辑层是连接用户交互层与数据库连接层的桥梁，所有“功能”均在业务逻辑层实现，用户交互层只负责调用，数据库连接层只负责把业务逻辑层处理后的数据进行存储，或是读取操作。
 
-Everytime a customer come to make a purchase, use `n` to create a new cart and then use `a ${productid} ${amount}` to add a product to the cart.
+![image-20220308141410435](https://gitee.com/cosie/markdown-pic/raw/master/img/202203081414890.png)
 
-Please make the POS system robust and fully functional by implementing more commands, for instance, print/empty/modify cart.
+* biz为业务逻辑层，PosService接口规定了系统应该实现的功能，PosServiceImp是对PosService的一个实现
+* cli为用户交互层，主要用Spring框架的Shell模块实现，当用户输入命令时，会调用业务逻辑层PosServiceImp的具体实现方法，而不是在用户交互层PosCommand实现
+* db为数据库连接层 PosDB规定了数据库应实现的功能，PosInMemoryDB是PosDB的一个实现
 
-Implementing a PosDB with real database is very much welcome. 
-
-Please elaborate your understanding in layered systems via this homework in your README.md.
+耦合性下降，cli可由前端人员开发，biz和db由后端人员开发，提高开发效率
